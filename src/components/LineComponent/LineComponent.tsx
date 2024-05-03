@@ -66,8 +66,6 @@ const drawElement = (
       context.beginPath();
       context.moveTo(element.x1, element.y1);
       context.lineTo(element.x2, element.y2);
-      // if (selected && compareAndGetSelectedElement(selected, element)) {
-      // }
       context.strokeStyle =
         selected && compareAndGetSelectedElement(selected, element)
           ? "red"
@@ -96,6 +94,7 @@ const LineComponent: React.FC = () => {
     const context = canvas.getContext("2d") as CanvasRenderingContext2D;
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.save();
+    console.log("canvasLineElementStore", canvasLineElementStore);
     canvasLineElementStore.elements.forEach((element: ElementType) => {
       drawElement(context, element, canvasLineElementStore.selectedElement);
     });
@@ -128,20 +127,6 @@ const LineComponent: React.FC = () => {
       default:
         throw new Error(`Type not recognised: ${type}`);
     }
-    // const distance = (distanceOfaLine(x1, y1, x2, y2) * 0.026458).toFixed(1);
-    // const angle = Math.round(calculateAngle(x1, y1, x2, y2));
-
-    // canvasLineElementStore.selectedElement = {
-    //   id,
-    //   x1,
-    //   y1,
-    //   x2,
-    //   y2,
-    //   type,
-    //   distance,
-    //   angle,
-    // };
-    // setSelectedElement({ id, x1, y1, x2, y2, type, distance, angle });
     canvasLineElementStore.elements = [...elements];
     setElements(elements, true);
   };
@@ -198,6 +183,7 @@ const LineComponent: React.FC = () => {
         clientY,
         tool
       );
+
       canvasLineElementStore.elements.push(element);
       canvasLineElementStore.selectedElement = { ...element };
       setElements((prevState) => [...prevState, element]);
@@ -221,7 +207,32 @@ const LineComponent: React.FC = () => {
 
     if (mouseAction === "drawing") {
       const index = canvasLineElementStore.elements.length - 1;
-      const { x1, y1 } = canvasLineElementStore.elements[index];
+      const { id, x1, y1, type } = canvasLineElementStore.elements[index];
+      const distance = (
+        distanceOfaLine(x1, y1, clientX, clientY) * 0.026458
+      ).toFixed(1);
+      const angle = Math.round(calculateAngle(x1, y1, clientX, clientY));
+
+      canvasLineElementStore.selectedElement = {
+        ...canvasLineElementStore.selectedElement,
+        id,
+        x1,
+        y1,
+        x2: clientX,
+        y2: clientY,
+        type,
+        distance,
+        angle,
+      };
+      setSelectedElement((prevState) => ({
+        ...(prevState as ElementType),
+        x1: x1,
+        y1: y1,
+        x2: clientX,
+        y2: clientY,
+        distance,
+        angle,
+      }));
       updateElement(index, x1, y1, clientX, clientY, tool);
     } else if (mouseAction === "moving") {
       if (canvasLineElementStore.selectedElement?.type === "line") {
@@ -239,24 +250,17 @@ const LineComponent: React.FC = () => {
         const height = y2 - y1;
         const newX1 = clientX - offsetX;
         const newY1 = clientY - offsetY;
-        // const distance = (
-        //   distanceOfaLine(newX1, newY1, newX1 + width, newY1 + height) *
-        //   0.026458
-        // ).toFixed(1);
-        // const angle = Math.round(
-        //   calculateAngle(newX1, newY1, newX1 + width, newY1 + height)
-        // );
 
-        // canvasLineElementStore.selectedElement = {
-        //   id,
-        //   x1,
-        //   y1,
-        //   x2,
-        //   y2,
-        //   type,
-        //   distance,
-        //   angle,
-        // };
+        canvasLineElementStore.selectedElement = {
+          ...canvasLineElementStore.selectedElement,
+          id,
+          x1: newX1,
+          y1: newY1,
+          x2: newX1 + width,
+          y2: newY1 + height,
+          type,
+        };
+
         updateElement(id, newX1, newY1, newX1 + width, newY1 + height, type);
       }
     } else if (mouseAction === "resizing") {
@@ -268,7 +272,29 @@ const LineComponent: React.FC = () => {
         position as string,
         coordinates
       );
+      const distance = (distanceOfaLine(x1, y1, x2, y2) * 0.026458).toFixed(1);
+      const angle = Math.round(calculateAngle(x1, y1, x2, y2));
 
+      canvasLineElementStore.selectedElement = {
+        ...canvasLineElementStore.selectedElement,
+        id,
+        x1,
+        y1,
+        x2,
+        y2,
+        type,
+        distance,
+        angle,
+      };
+      setSelectedElement((prevState) => ({
+        ...(prevState as ElementType),
+        x1: x1,
+        y1: y1,
+        x2: x2,
+        y2: y2,
+        distance,
+        angle,
+      }));
       updateElement(id, x1, y1, x2, y2, type);
     }
   };
