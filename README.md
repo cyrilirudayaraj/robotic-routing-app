@@ -28,6 +28,11 @@ To install and set up the Route Managing System, follow these steps:
 6. Open http://localhost:8080/
 7. If you want to configure port, you can do it in vite.config.ts
 
+## Prerequisites
+
+Node - v20.11.1
+vs code - v1.88.1
+
 ## Credits
 
 This project was created by [Cyril Irudayaraj Joseph](https://github.com/cyrilirudayaraj/).
