@@ -1,6 +1,7 @@
 import { ElementType } from "../intefaces/ElementType";
 const initialState: ElementType = {} as ElementType;
-export const canvasLineElementStore: any = {
+import { CanvasLineElementStore } from "../intefaces/CanvasLineElementStore";
+export const canvasLineElementStore: CanvasLineElementStore = {
   selectedElement: initialState,
   elements: [] as ElementType[],
   cachedSnapshot: null as ReturnType<

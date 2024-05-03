@@ -60,15 +60,14 @@ const drawElement = (
   context: CanvasRenderingContext2D,
   element: ElementType,
   selected?: ElementType | undefined
-) => {
+): void => {
   switch (element.type) {
     case "line":
       context.beginPath();
       context.moveTo(element.x1, element.y1);
       context.lineTo(element.x2, element.y2);
-
-      if (selected && compareAndGetSelectedElement(selected, element)) {
-      }
+      // if (selected && compareAndGetSelectedElement(selected, element)) {
+      // }
       context.strokeStyle =
         selected && compareAndGetSelectedElement(selected, element)
           ? "red"
@@ -76,13 +75,13 @@ const drawElement = (
       context.stroke();
       break;
     default:
-      throw new Error(`Type not recognised: ${element.type}`);
+      throw new Error(`Type is not defined: ${element.type}`);
   }
 };
 
 const LineComponent: React.FC = () => {
   const [elements, setElements] = useHistory<ElementType[]>([]);
-  const [action, setAction] = useState<string>("none");
+  const [mouseAction, setMouseAction] = useState<string>("none");
   const [tool, setTool] = useState<string>("line");
   const [selectedElement, setSelectedElement] = useState<ElementType | null>(
     null
@@ -186,8 +185,8 @@ const LineComponent: React.FC = () => {
         );
         // setElements((prevState) => prevState);
         element.position === "inside"
-          ? setAction("moving")
-          : setAction("resizing");
+          ? setMouseAction("moving")
+          : setMouseAction("resizing");
       }
     } else {
       const id = canvasLineElementStore.elements.length;
@@ -203,13 +202,12 @@ const LineComponent: React.FC = () => {
       canvasLineElementStore.selectedElement = { ...element };
       setElements((prevState) => [...prevState, element]);
       setSelectedElement(element);
-      setAction(tool === "text" ? "writing" : "drawing");
+      setMouseAction(tool === "text" ? "writing" : "drawing");
     }
   };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const { clientX, clientY } = getLayoutCoordinates(event);
-    //if (tool === "selection") {
     const element = getSelectedElement(
       clientX,
       clientY,
@@ -219,14 +217,13 @@ const LineComponent: React.FC = () => {
     event.currentTarget.style.cursor = element
       ? cursor(element.position as string)
       : "crosshair";
-    //}
     element ? setTool("selection") : setTool("line");
 
-    if (action === "drawing") {
+    if (mouseAction === "drawing") {
       const index = canvasLineElementStore.elements.length - 1;
       const { x1, y1 } = canvasLineElementStore.elements[index];
       updateElement(index, x1, y1, clientX, clientY, tool);
-    } else if (action === "moving") {
+    } else if (mouseAction === "moving") {
       if (canvasLineElementStore.selectedElement?.type === "line") {
         const {
           id,
@@ -262,7 +259,7 @@ const LineComponent: React.FC = () => {
         // };
         updateElement(id, newX1, newY1, newX1 + width, newY1 + height, type);
       }
-    } else if (action === "resizing") {
+    } else if (mouseAction === "resizing") {
       const { id, type, position, ...coordinates } =
         canvasLineElementStore.selectedElement as ElementType;
       const { x1, y1, x2, y2 }: any = resizeElement(
@@ -277,31 +274,20 @@ const LineComponent: React.FC = () => {
   };
 
   const handleMouseUp = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    const { clientX, clientY } = getLayoutCoordinates(event);
     if (canvasLineElementStore.selectedElement) {
-      if (
-        canvasLineElementStore.selectedElement.type === "text" &&
-        clientX - (canvasLineElementStore.selectedElement.offsetX || 0) ===
-          canvasLineElementStore.selectedElement.x1 &&
-        clientY - (canvasLineElementStore.selectedElement.offsetY || 0) ===
-          canvasLineElementStore.selectedElement.y1
-      ) {
-        //setAction("writing");
-        return;
-      }
-
       const index = canvasLineElementStore.selectedElement.id;
       const { id, type, x1, y1, x2, y2 } =
         canvasLineElementStore.elements[index];
       if (
-        action === "drawing" ||
-        action === "resizing" ||
-        action === "moving"
+        mouseAction === "drawing" ||
+        mouseAction === "resizing" ||
+        mouseAction === "moving"
       ) {
         updateElement(id, x1, y1, x2, y2, type);
         const distance = (distanceOfaLine(x1, y1, x2, y2) * 0.026458).toFixed(
           1
         );
+        console.log("event type is", event);
         const angle = Math.round(calculateAngle(x1, y1, x2, y2));
         canvasLineElementStore.selectedElement = {
           ...canvasLineElementStore.selectedElement,
@@ -323,7 +309,7 @@ const LineComponent: React.FC = () => {
         }));
       }
     }
-    setAction("none");
+    setMouseAction("none");
     //setTool("line");
   };
 
