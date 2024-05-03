@@ -1,30 +1,33 @@
-# React + TypeScript + Vite
+# Route Managing System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
 
-Currently, two official plugins are available:
+The Route Managing System is a web application designed to solve the following requirements:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. **Drawing Multiple Lines**: Users can draw multiple lines to represent routes inside a farm or any other location where a machine should follow specific paths.
 
-## Expanding the ESLint configuration
+2. **Draggable Lines**: Each line is draggable, allowing users to move its start and end points as well as the entire line. This functionality resembles tools like draw.io, making it intuitive for users to adjust routes as needed.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+3. **Rotatable Lines**: Users can rotate the lines by holding a point (start or end) and rotating the line around the other point. This feature provides flexibility in route planning, allowing users to align routes according to the terrain or other constraints.
 
-- Configure the top-level `parserOptions` property like this:
+4. **Display Line Information**: As an extra feature, the Route Managing System displays selected line's length and angle on the top of the screen in input fields. This information helps users precisely configure and optimize routes.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Installation
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+To install and set up the Route Managing System, follow these steps:
+
+1. Clone the repository to your local machine:
+   ```bash
+   git clone https://github.com/yourusername/route-managing-system.git
+   ```
+2. cd route-managing-system
+3. Install dependencies using npm or yarn:
+   npm install
+4. For Dev, run 'npm run dev'
+5. For Build and Preview,run 'npm run build' and 'npm run preview'
+6. Open http://localhost:8080/
+7. If you want to configure port, you can do it in vite.config.ts
+
+## Credits
+
+This project was created by [Cyril Irudayaraj Joseph](https://github.com/cyrilirudayaraj/).
