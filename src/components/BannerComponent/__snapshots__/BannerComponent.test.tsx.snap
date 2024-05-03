@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BannerComponent renders banner component with correct data 1`] = `
+<div>
+  <div>
+    Line 2
+  </div>
+  <div>
+    <div>
+      <div>
+        Length(cms)
+      </div>
+      <div
+        role="value1"
+      >
+        10
+      </div>
+    </div>
+    <div>
+      <div>
+        Angle(degrees)
+      </div>
+      <div
+        role="value2"
+      >
+        45
+      </div>
+    </div>
+  </div>
+</div>
+`;
