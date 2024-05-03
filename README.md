@@ -18,7 +18,7 @@ To install and set up the Route Managing System, follow these steps:
 
 1. Clone the repository to your local machine:
    ```bash
-   git clone https://github.com/yourusername/route-managing-system.git
+   git clone https://github.com/cyrilirudayaraj/robotic-routing-app.git
    ```
 2. cd route-managing-system
 3. Install dependencies using npm or yarn:
